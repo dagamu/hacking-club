@@ -12,7 +12,8 @@ const toc = (str) => {
 
 // https://astro.build/config
 export default defineConfig({
-	site: "https://astroprops.netlify.app/",
+	site: 'https://dagamu.github.io/',
+  	base: 'hacking-club',
 	integrations: [
 		robotsTxt(),
 		sitemap(),
