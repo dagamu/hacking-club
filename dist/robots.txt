@@ -1,3 +1,0 @@
-User-agent: *
-Allow: /
-Sitemap: https://dagamu.github.io/hacking-club/sitemap-index.xml
