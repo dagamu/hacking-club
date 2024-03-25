@@ -1,0 +1,1 @@
+import"./hoisted.f0cc4858.js";import"./solid.c09dcdea.js";if("fathom"in window){const o=document.getElementById("four-o-four")?.dataset.goal;o&&window.addEventListener("load",()=>window.fathom.trackGoal(o,0))}

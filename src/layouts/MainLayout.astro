@@ -1,0 +1,39 @@
+---
+import BaseHead, { type Props as HeadProps } from "~/components/BaseHead.astro";
+import SkipLink from "~/components/SkipLink.astro";
+import Header from "~/components/Header.astro";
+import Footer from "~/components/Footer.astro";
+import "~/styles/global.css";
+
+export type Props = HeadProps;
+
+const { ...head } = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<BaseHead {...head} />
+	</head>
+	<body>
+		<SkipLink text="Skip to main content" />
+		<Header />
+		<slot />
+		<Footer />
+		<style>
+			html.disclosure-open {
+				overflow-y: hidden;
+			}
+
+			html.disclosure-open #nav {
+				overflow-y: auto;
+			}
+			body {
+				overflow-x: hidden;
+				display: flex;
+				flex-direction: column;
+				min-height: 100dvb;
+			}
+		</style>
+	</body>
+</html>

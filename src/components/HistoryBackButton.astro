@@ -1,0 +1,42 @@
+---
+import { Icon } from "astro-icon";
+type Props = {
+	text: string;
+};
+
+const { text }: Props = Astro.props;
+---
+
+<button onclick="history.back()">
+	<Icon name="mdi:arrow-u-left-top" />
+	<span>{text}</span>
+</button>
+
+<style>
+	button {
+		display: flex;
+		align-items: center;
+		background: none;
+		border: none;
+		cursor: pointer;
+		& span {
+			color: var(--text-2);
+			opacity: 0.7;
+		}
+		&:hover span {
+			color: var(--text-1);
+			opacity: 1;
+		}
+		& [astro-icon="mdi:arrow-u-left-top"] {
+			color: var(--link);
+			inline-size: var(--size-4);
+			block-size: var(--size-4);
+		}
+		&:hover [astro-icon="mdi:arrow-u-left-top"] {
+			color: var(--link-hover);
+		}
+	}
+	span {
+		margin-inline-start: var(--size-2);
+	}
+</style>

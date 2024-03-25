@@ -1,0 +1,127 @@
+---
+import { getCollection } from "astro:content";
+import Layout from "~/layouts/MainLayout.astro";
+import HistoryBackButton from "~/components/HistoryBackButton.astro";
+import { getCategories, getPostsByCategory } from "~/helpers/categories";
+import siteInfo from "~/data/site-info";
+import PostPreview from "~/components/PostPreview.astro";
+import StyledHr from "~/components/StyledHr.astro";
+
+export async function getStaticPaths() {
+	const posts = await getCollection("blog");
+
+	const categories = getCategories(posts);
+
+	return categories.map((category: string) => {
+		return {
+			params: { slug: category },
+			props: { category: category },
+		};
+	});
+}
+
+const { category } = Astro.props as { category: string };
+
+const posts = await getCollection("blog", ({ data }) => !data.draft);
+
+const categoryPosts = getPostsByCategory(posts, category);
+
+const placeholderGradient = `var(--gradient-${
+	Math.floor(Math.random() * 30) + 1
+})`;
+---
+
+<Layout
+	title={`Category:${category}`}
+	description={`Browse all ${siteInfo.name} posts about ${category}`}
+	image={{ src: "/og/blog.jpg", alt: `The ${siteInfo.name} Blog` }}
+>
+	<div class="container">
+		<div class="placeholder-gradient"></div>
+		<header>
+			<HistoryBackButton text="Back" />
+			<h1>{category}</h1>
+			<p>Browse all posts in <br />the {category} category.</p>
+		</header>
+		<StyledHr rand />
+
+		<ul>
+			{
+				categoryPosts.map((post) => (
+					<li>
+						<PostPreview post={post} />
+					</li>
+				))
+			}
+		</ul>
+	</div>
+</Layout>
+
+<style define:vars={{ placeholderGradient }}>
+	@import "open-props/src/props.media.css";
+	@import "open-props/gradients";
+	ul {
+		list-style: none;
+		padding-inline-start: 0;
+		margin-block-start: 0;
+		margin-block-end: 0;
+		& > * + * {
+			margin-block-start: var(--size-9);
+		}
+	}
+	li {
+		max-inline-size: initial;
+	}
+	header {
+		background-color: var(--surface-1);
+		padding: var(--size-6);
+		margin-inline: auto;
+		inline-size: 100%;
+		text-align: center;
+		max-inline-size: min(var(--size-content-3), 80vi);
+		border-radius: var(--radius-2);
+	}
+	div.placeholder-gradient {
+		position: relative;
+		aspect-ratio: var(--ratio-widescreen);
+		clip-path: circle(200% at center -200%);
+		object-fit: cover;
+		box-shadow: var(--shadow-2);
+		z-index: -1;
+		max-inline-size: 100vi;
+		inset-inline-start: 50%;
+		inset-inline-end: 50%;
+		margin-left: -50vi;
+		margin-right: -50vi;
+		margin-block-end: calc(-1 * var(--size-12));
+		@media (--sm-n-above) {
+			margin-block-end: calc(-1 * var(--size-11));
+			aspect-ratio: var(--ratio-ultrawide);
+			clip-path: circle(200% at center -430%);
+		}
+		@media (--lg-n-above) {
+			inline-size: 100%;
+			max-inline-size: initial;
+			inset-inline-start: initial;
+			inset-inline-end: initial;
+			margin-left: 0;
+			margin-right: 0;
+			margin-block-end: calc(-1 * var(--size-11));
+		}
+	}
+	br {
+		display: initial;
+		@media (--md-n-above) {
+			display: none;
+		}
+	}
+	div.placeholder-gradient {
+		background-image: var(--placeholderGradient);
+		background-size: cover;
+	}
+	p {
+		font-family: var(--font-mono);
+		color: var(--text-2);
+		opacity: 0.7;
+	}
+</style>

@@ -1,0 +1,40 @@
+---
+import { Icon } from "astro-icon";
+import type { SocialLink } from "~/data/site-info.js";
+import ExternalLink from "~/components/ExternalLink.astro";
+
+export type Props = {
+	links: SocialLink[];
+};
+
+const { links } = Astro.props;
+---
+
+<div>
+	{
+		links.map((link) => (
+			<ExternalLink href={link.href}>
+				<span class="sr-only">{link.text}</span>
+				<Icon name={link.icon} size={32} aria-hidden="true" />
+			</ExternalLink>
+		))
+	}
+</div>
+
+<style>
+	div {
+		display: flex;
+		align-items: center;
+		gap: var(--size-3);
+		& a {
+			color: var(--text-2);
+			&:visited {
+				color: var(--text-2);
+			}
+			&:hover {
+				color: var(--text-1);
+				text-decoration: none;
+			}
+		}
+	}
+</style>

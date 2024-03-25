@@ -1,0 +1,44 @@
+---
+type Props = {
+	deco?: string;
+	rand?: boolean;
+};
+
+const { deco, rand = false } = Astro.props as Props;
+let renderedDeco: string | undefined;
+switch (true) {
+	case rand:
+		renderedDeco = `"${String.fromCharCode(
+			0x2715 + Math.random() * (0x274b - 0x2715 + 1),
+		)}"`;
+		break;
+	case undefined !== deco:
+		renderedDeco = `"${deco}"`;
+		break;
+	default:
+		renderedDeco = undefined;
+		break;
+}
+---
+
+<hr />
+
+<style define:vars={{ renderedDeco }}>
+	hr {
+		max-inline-size: var(--size-header-1);
+		margin-inline: auto;
+		margin-block: var(--size-9);
+		background-color: var(--link);
+		overflow: visible;
+		text-align: center;
+		line-height: var(--border-size-1);
+
+		&::after {
+			content: var(--renderedDeco);
+			color: var(--link);
+			display: inline;
+			background-color: var(--surface-1);
+			padding-inline: var(--size-1);
+		}
+	}
+</style>

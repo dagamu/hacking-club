@@ -1,0 +1,81 @@
+---
+import { Icon } from "astro-icon";
+import HeaderDrawerContent from "~/components/HeaderDrawerContent.astro";
+import HeaderNav from "~/components/HeaderNav.astro";
+import SchemeToggle from "~/components/SchemeToggle.astro";
+---
+
+<header id="nav">
+	<nav aria-label="Primary" class="container">
+		<HeaderNav />
+		<SchemeToggle />
+		<button id="astroprops-drawer-trigger" type="button">
+			<Icon name="mdi:menu" />
+			<span class="sr-only">Show Menu</span>
+		</button>
+	</nav>
+	<div id="astroprops-drawer" style="display: none;">
+		<HeaderDrawerContent />
+	</div>
+</header>
+
+<style>
+	@import "open-props/src/props.media.css";
+	div {
+		transform: translateX(calc(-1 * var(--size-3)));
+		border-block-start-width: var(--border-size-1);
+		border-block-start-color: var(--surface-2);
+		opacity: 0;
+		@media (--motionOK) {
+			transition-property: opacity, transform;
+			transition-timing-function: var(--ease-out-3);
+			transition-duration: 0.15s;
+		}
+	}
+	div[data-open="true"] {
+		transform: translateX(0);
+		opacity: 1;
+	}
+	header {
+		position: sticky;
+		inset-block-start: 0;
+		z-index: var(--layer-2);
+		max-block-size: 100dvb;
+		background-color: var(--surface-1);
+		box-shadow: var(--shadow-1);
+		border-block-end: var(--border-size-1) solid hsl(var(--surface-2-hsl) / 50%);
+	}
+	nav {
+		display: flex;
+		align-items: center;
+		min-block-size: var(--size-10);
+		gap: var(--size-3);
+	}
+	button {
+		margin-inline-start: var(--size-5);
+		background-color: transparent;
+		background-image: none;
+		color: var(--text-2);
+		&:hover {
+			color: var(--text-1);
+		}
+		@media (--lg-n-above) {
+			display: none;
+		}
+	}
+	[astro-icon="mdi:menu"] {
+		width: var(--size-8);
+		height: var(--size-8);
+	}
+</style>
+<script>
+	import { createDisclosure } from "~/helpers/disclosure";
+
+	createDisclosure({
+		button: document.querySelector("#astroprops-drawer-trigger") as HTMLElement,
+		content: document.querySelector("#astroprops-drawer") as HTMLElement,
+		animated: true,
+		/** matches the `lg-n-above` custom media query above */
+		closeAt: 1024,
+	});
+</script>

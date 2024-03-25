@@ -1,0 +1,78 @@
+---
+import { type CollectionEntry } from "astro:content";
+import { format } from "date-fns";
+import { resolveCoverImage } from "~/helpers/posts";
+import { Picture } from "@astrojs/image/components";
+
+export type Props = {
+	post: CollectionEntry<"blog">;
+};
+
+const { post } = Astro.props;
+
+const image = await resolveCoverImage(post);
+---
+
+<article>
+	<a href={`/posts/${post.slug}/`} rel="prefetch">
+		<hgroup>
+			<h3>{post.data.title}</h3>
+			<time datetime={post.data.publishDate.toISOString()}>
+				{format(post.data.publishDate, "MMMM d, yyyy")}
+			</time>
+		</hgroup>
+
+		{
+			image && (
+				<Picture
+					src={image.src}
+					alt={post.data.title}
+					sizes="(max-width: 768px) 100vw, 768px"
+					widths={[240, 360, 480, 768]}
+					aspectRatio="4:1"
+					fit="cover"
+					position="entropy"
+					loading="lazy"
+					decoding="async"
+				/>
+			)
+		}
+		<p class="text-astro-gray-200">{post.data.description}</p>
+	</a>
+</article>
+
+<style>
+	article {
+		inline-size: 100%;
+		max-inline-size: var(--size-content-3);
+		margin-inline: auto;
+		padding: 0;
+		background-color: var(--surface-2);
+		border-radius: var(--radius-2);
+	}
+	hgroup {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: var(--size-4);
+		padding: var(--size-4);
+	}
+	a {
+		display: block;
+		text-decoration: none;
+		color: inherit;
+	}
+	time {
+		font-family: var(--font-mono);
+		color: var(--text-2);
+		opacity: 0.7;
+	}
+	h3 {
+		marginmargin: 0;
+	}
+	p {
+		padding: var(--size-4);
+		margin: 0;
+		color: var(--text-2);
+	}
+</style>

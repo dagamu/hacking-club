@@ -1,0 +1,131 @@
+---
+import { GetStaticPathsOptions, Page } from "astro";
+import { CollectionEntry, getCollection } from "astro:content";
+import Pagination from "~/components/Pagination.astro";
+import Layout from "~/layouts/MainLayout.astro";
+import PostPreview from "~/components/PostPreview.astro";
+import siteInfo from "~/data/site-info";
+import HistoryBackButton from "~/components/HistoryBackButton.astro";
+import StyledHr from "~/components/StyledHr.astro";
+
+export const prerender = true;
+
+export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
+	// fetch all showcase sites
+	const posts = await getCollection("blog");
+
+	// sort featured sites to the front, randomize the rest
+	const sortedPosts = posts.sort(
+		(a: CollectionEntry<"blog">, b: CollectionEntry<"blog">) =>
+			b.data.publishDate.getTime() - a.data.publishDate.getTime(),
+	);
+
+	return paginate(sortedPosts, { pageSize: siteInfo.postPerPage });
+}
+
+const { page } = Astro.props as { page: Page<CollectionEntry<"blog">> };
+
+const allPages = [...Array(page.lastPage).keys()].map((num) => {
+	return `/posts${num === 0 ? "" : `/${String(num + 1)}`}`;
+});
+const placeholderGradient = `var(--gradient-${
+	Math.floor(Math.random() * 30) + 1
+})`;
+---
+
+<Layout
+	title={`The ${siteInfo.name} Blog`}
+	description={`Get all the latest news from ${siteInfo.name}`}
+	image={{ src: "/og/blog.jpg", alt: `The ${siteInfo.name} Blog` }}
+>
+	<div class="container">
+		<div class="placeholder-gradient"></div>
+		<header>
+			<HistoryBackButton text="Back" />
+			<h1>{`${siteInfo.name} Blog`}</h1>
+			<p>Explore our articles.</p>
+		</header>
+		<StyledHr rand />
+
+		<ul>
+			{
+				page.data.map((post) => (
+					<li>
+						<PostPreview post={post} />
+					</li>
+				))
+			}
+		</ul>
+
+		<Pagination restRoute allPages={allPages} page={page} />
+	</div>
+</Layout>
+
+<style define:vars={{ placeholderGradient }}>
+	@import "open-props/src/props.media.css";
+	@import "open-props/gradients";
+	ul {
+		list-style: none;
+		padding-inline-start: 0;
+		margin-block-start: 0;
+		margin-block-end: 0;
+		& > * + * {
+			margin-block-start: var(--size-9);
+		}
+	}
+	li {
+		max-inline-size: initial;
+	}
+	header {
+		background-color: var(--surface-1);
+		padding: var(--size-6);
+		margin-inline: auto;
+		inline-size: 100%;
+		text-align: center;
+		max-inline-size: min(var(--size-content-3), 80vi);
+		border-radius: var(--radius-2);
+	}
+	div.placeholder-gradient {
+		position: relative;
+		aspect-ratio: var(--ratio-widescreen);
+		clip-path: circle(200% at center -200%);
+		object-fit: cover;
+		box-shadow: var(--shadow-2);
+		z-index: -1;
+		max-inline-size: 100vi;
+		inset-inline-start: 50%;
+		inset-inline-end: 50%;
+		margin-left: -50vi;
+		margin-right: -50vi;
+		margin-block-end: calc(-1 * var(--size-12));
+		@media (--sm-n-above) {
+			margin-block-end: calc(-1 * var(--size-11));
+			aspect-ratio: var(--ratio-ultrawide);
+			clip-path: circle(200% at center -430%);
+		}
+		@media (--lg-n-above) {
+			inline-size: 100%;
+			max-inline-size: initial;
+			inset-inline-start: initial;
+			inset-inline-end: initial;
+			margin-left: 0;
+			margin-right: 0;
+			margin-block-end: calc(-1 * var(--size-11));
+		}
+	}
+	br {
+		display: initial;
+		@media (--md-n-above) {
+			display: none;
+		}
+	}
+	div.placeholder-gradient {
+		background-image: var(--placeholderGradient);
+		background-size: cover;
+	}
+	p {
+		font-family: var(--font-mono);
+		color: var(--text-2);
+		opacity: 0.7;
+	}
+</style>

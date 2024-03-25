@@ -1,0 +1,30 @@
+@import "open-props/src/props.media.css";
+@import "open-props/gradients";
+@import "~/styles/color-theme.css";
+@import "~/styles/custom-normalize.css";
+@import "~/styles/prose.css";
+
+:root {
+	--site-width: 60rem;
+}
+
+.container {
+	margin-inline: auto;
+	width: 100%;
+	max-inline-size: var(--site-width);
+	padding-inline: var(--size-4);
+	@media (--md-n-above) {
+		padding-inline: var(--size-7);
+	}
+}
+.sr-only {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+	white-space: nowrap;
+	border-width: 0;
+}

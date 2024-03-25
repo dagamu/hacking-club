@@ -1,0 +1,109 @@
+---
+export type Props = {
+	ctaText: string;
+	ctaUrl: string;
+	ctaIcon?: string;
+	external?: boolean;
+	outline?: boolean;
+};
+
+const {
+	ctaText,
+	ctaUrl,
+	ctaIcon = "",
+	external = false,
+	outline = false,
+} = Astro.props;
+---
+
+<a
+	href={ctaUrl}
+	target={external ? "_blank" : "_self"}
+	class={outline ? "outline" : ""}
+	>{ctaIcon !== "" && <span data-icon={ctaIcon} />}{ctaText}</a
+>
+<style>
+	@import "open-props/src/props.media.css";
+	a {
+		--_accent: initial;
+		--_text: initial;
+		--_size: initial;
+		--_bg-light: #fff;
+		--_bg-dark: var(--surface-3);
+		--_bg: var(--_bg-light);
+		--_border: var(--surface-3);
+		--_highlight-size: 0;
+		--_highlight-light: hsl(var(--gray-5-hsl) / 25%);
+		--_highlight-dark: hsl(var(--gray-12-hsl) / 25%);
+		--_highlight: var(--_highlight-light);
+		--_ink-shadow-light: 0 1px 0 var(--gray-3);
+		--_ink-shadow-dark: 0 1px 0 var(--surface-1);
+		--_ink-shadow: var(--_ink-shadow-light);
+		--_icon-size: 2ch;
+		--_icon-color: var(--_accent, var(--link));
+		-webkit-tap-highlight-color: transparent;
+		-webkit-touch-callout: none;
+		align-items: center;
+		background: var(--_bg);
+		border: var(--border-size-2) solid var(--_border);
+		border-radius: var(--radius-2);
+		box-shadow: var(--shadow-2), 0 1px var(--surface-3),
+			0 0 0 var(--_highlight-size) var(--_highlight);
+		color: var(--_text);
+		display: inline-flex;
+		font-size: var(--_size);
+		font-weight: var(--font-weight-7);
+		gap: var(--size-2);
+		justify-content: center;
+		padding-block: 0.75ch;
+		padding-inline: 1.75ch;
+		text-align: center;
+		text-decoration: none;
+		text-shadow: var(--_ink-shadow);
+		transition: border-color 0.5s var(--ease-3) 3s;
+		user-select: none;
+		@media (--OSdark) {
+			--_highlight: var(--_highlight-dark);
+			--_bg: var(--_bg-dark);
+			--_ink-shadow: var(--_ink-shadow-dark);
+		}
+		@media (--motionOK) {
+			transition: border-color 0.5s var(--ease-3) 3s,
+				box-shadow 145ms var(--ease-4), outline-offset 145ms var(--ease-4);
+		}
+		&:not(:active):hover {
+			--_highlight-size: var(--size-2);
+			transition-delay: 0s;
+			transition-duration: 0.25s;
+		}
+		& > svg {
+			block-size: var(--_icon-size);
+			filter: drop-shadow(var(--_ink-shadow));
+			flex-shrink: 0;
+			inline-size: var(--_icon-size);
+			& > * {
+				stroke: var(--_icon-color);
+				stroke-width: var(--border-size-2);
+			}
+		}
+		&.outline {
+			background-color: transparent;
+		}
+	}
+	[data-icon] {
+		background: var(--gradient-6);
+		inline-size: 2ch;
+		block-size: 2ch;
+		filter: drop-shadow(var(--_ink-shadow));
+	}
+	[data-icon="github"] {
+		--icon-github: url("https://api.iconify.design/mdi:github.svg") center /
+			contain no-repeat;
+		-webkit-mask: var(--icon-github);
+	}
+	[data-icon="book"] {
+		--icon-github: url("https://api.iconify.design/mdi:book-open.svg") center /
+			contain no-repeat;
+		-webkit-mask: var(--icon-github);
+	}
+</style>

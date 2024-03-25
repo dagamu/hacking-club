@@ -1,0 +1,126 @@
+/* This file complements Normalize for narkup rendered content */
+
+.prose {
+	margin-inline: auto;
+	inline-size: 100%;
+	max-inline-size: var(--size-content-3);
+	letter-spacing: var(--font-letterspacing-1);
+	color: var(--text-2);
+
+	& > p {
+		margin-top: var(--size-3);
+		margin-bottom: var(--size-3);
+	}
+
+	& > hr {
+		margin-block: var(--size-7);
+		background-color: var(--surface-2);
+	}
+
+	& > h2 {
+		margin-top: var(--size-8);
+		margin-bottom: var(--size-3);
+	}
+
+	& h3 {
+		margin-top: var(--size-8);
+		margin-bottom: var(--size-3);
+	}
+
+	& > img {
+		margin-block: var(--size-3);
+	}
+
+	& strong {
+		font-weight: var(--font-weight-5);
+	}
+
+	& ul {
+		margin-block: var(--size-3);
+		list-style-type: none;
+
+		& li {
+			&:before {
+				content: "⁃";
+				display: inline-block;
+				color: var(--brand);
+				inline-size: var(--size-2);
+				block-size: var(--size-2);
+				margin-inline-end: var(--size-3);
+				margin-inline-start: calc(-1 * var(--size-5));
+			}
+		}
+	}
+
+	& ol {
+		margin-top: var(--size-3);
+		margin-bottom: var(--size-3);
+		list-style-type: decimal;
+
+		& ::marker {
+			display: inline-block;
+			font-family: var(--font-mono);
+			font-weight: var(--font-weight-7);
+			color: var(--brand);
+		}
+	}
+	& li {
+		margin-top: 0.5rem;
+		margin-bottom: 0.5rem;
+		& p {
+			display: inline;
+		}
+	}
+	& sup > :where(a) {
+		font-weight: var(--font-weight-9);
+		&::before,
+		&::after {
+			font-weight: var(--font-weight-4);
+			content: "( ";
+		}
+		&::after {
+			content: " )";
+		}
+	}
+	& .footnotes {
+		margin-block: var(--size-9);
+		padding-block: var(--size-2);
+		border: var(--border-size-1) dotted var(--surface-3);
+		border-radius: var(--radius-2);
+		& * {
+			font-size: var(--font-size-0);
+			font-style: italic;
+		}
+	}
+	& > pre {
+		max-inline-size: initial;
+		margin-block: var(--size-5);
+		border-radius: var(--radius-2);
+		border-width: var(--border-size-1);
+		border-color: var(--surface-3);
+		background-color: transparent;
+		padding: var(--size-2) var(--size-4);
+		font-size: 85%;
+		line-height: var(--font-lineheight-3);
+	}
+	& > table {
+		width: 100%;
+		table-layout: auto;
+		text-align: left;
+		margin-top: 2em;
+		margin-bottom: 2em;
+		font-size: 0.875em;
+		line-height: 1.7142857;
+		text-indent: 0;
+		border-collapse: collapse;
+		& th,
+		td {
+			padding: var(--size-2) var(--size-4);
+			border-width: 1px;
+			border-color: var(--surface-2);
+		}
+		& tbody > tr:nth-child(odd) {
+			background-color: hsl(var(--surface-2-hsl) / 20%);
+		}
+	}
+}

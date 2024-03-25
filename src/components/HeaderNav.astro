@@ -1,0 +1,74 @@
+---
+import siteInfo from "~/data/site-info.js";
+import SiteLogo from "~/components/SiteLogo.astro";
+import SocialLinks from "~/components/SocialLinks.astro";
+import { Icon } from "astro-icon";
+const socialLinks = siteInfo.socialLinks.filter((link) => !link.footerOnly);
+---
+
+<SiteLogo />
+
+<ul>
+	<li><a href="/posts/">Posts</a></li>
+	<li><a href="/categories/" rel="prefetch">Categories</a></li>
+	<li><a href="/about/" rel="prefetch">About</a></li>
+	<li>
+		<a href="/search-posts/" rel="prefetch">
+			<Icon
+				pack="heroicons-outline"
+				name="search"
+				size={24}
+				aria-hidden="true"
+			/>
+			<span class="sr-only">Search</span></a>
+	</li>
+</ul>
+
+<div class="spacer"></div>
+
+<div class="social-group">
+	<SocialLinks links={socialLinks} />
+</div>
+
+<style>
+	@import "open-props/src/props.media.css";
+	ul {
+		margin-inline-start: var(--size-8);
+		padding: initial;
+		display: none;
+		flex-shrink: initial;
+		flex-direction: row;
+		align-items: center;
+		gap: var(--size-8);
+		@media (--lg-n-above) {
+			display: flex;
+		}
+	}
+	li {
+		padding: initial;
+		list-style: none;
+	}
+
+	a {
+		color: var(--text-2);
+		opacity: 0.7;
+		&:visited {
+			color: var(--text-2);
+		}
+		&:hover {
+			color: var(--text-1);
+			opacity: 1;
+			text-decoration: none;
+		}
+	}
+
+	div.spacer {
+		flex: 1;
+	}
+	div.social-group {
+		display: none;
+		@media (--sm-n-above) {
+			display: block;
+		}
+	}
+</style>

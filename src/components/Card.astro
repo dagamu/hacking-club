@@ -1,0 +1,34 @@
+---
+import ButtonLink from "~/components/ButtonLink.astro";
+
+export type Props = {
+	title: string;
+	description: string;
+	ctaText: string;
+	ctaUrl: string;
+	ctaIcon?: string;
+	external?: boolean;
+};
+
+const { title, description, ...rest } = Astro.props;
+---
+
+<article>
+	<h3>{title}</h3>
+	<p>{description}</p>
+	<ButtonLink {...rest} />
+</article>
+
+<style>
+	h3,
+	p {
+		margin-block-end: var(--size-6);
+	}
+	article {
+		background-color: var(--surface-2);
+		padding: var(--size-8);
+		border-radius: var(--radius-2);
+		box-shadow: var(--shadow-4);
+		max-width: var(--size-content-3);
+	}
+</style>

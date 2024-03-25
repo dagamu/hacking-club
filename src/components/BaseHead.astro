@@ -1,0 +1,62 @@
+---
+import smartypants from "smartypants";
+import siteInfo from "~/data/site-info";
+import Favicon from "~/components/Favicon.astro";
+import SEO from "~/components/SEO.astro";
+
+export type Props = {
+	title?: string;
+	description?: string;
+	image?: { src: string; alt: string };
+	canonicalURL?: URL | null;
+	pageType?: "website" | "article";
+};
+
+const {
+	description = siteInfo.description,
+	image = siteInfo.image,
+	canonicalURL = new URL(Astro.request.url, Astro.site),
+	pageType = "website",
+} = Astro.props as Props;
+
+const title = [Astro.props.title, siteInfo.name].filter(Boolean).join(" | ");
+const resolvedImage = {
+	src: new URL(image.src, Astro.site).toString(),
+	alt: image.alt,
+};
+---
+
+<!-- Global Metadata -->
+<meta charset="utf-8" />
+<meta name="generator" content={Astro.generator} />
+<meta name="viewport" content="width=device-width" />
+<meta name="theme-color" content={siteInfo.brandColor} />
+
+<Favicon />
+<link rel="mask-icon" href="/favicon.svg" color={siteInfo.brandColor} />
+<link rel="sitemap" href="/sitemap-index.xml" />
+<link rel="alternate" type="application/rss+xml" href="/rss.xml" title="RSS" />
+
+<title set:html={smartypants(title, 1)} />
+
+<SEO
+	name={siteInfo.name}
+	title={title}
+	description={description}
+	image={resolvedImage}
+	twitter={{ handle: siteInfo.twitterHandle }}
+	og={{ type: pageType }}
+	canonicalURL={canonicalURL}
+/>
+
+<!-- Fathom - beautiful, simple website analytics -->
+{
+	siteInfo.fathomSiteId && (
+		<script
+			src="https://cdn.usefathom.com/script.js"
+			data-site={siteInfo.fathomSiteId}
+			defer
+		/>
+	)
+}
+<!-- / Fathom -->

@@ -1,0 +1,29 @@
+---
+import siteInfo from "~/data/site-info.js";
+---
+
+<a href="/" rel="prefetch" title="Home" data-home-link>
+	{siteInfo.name}
+</a>
+
+<script>
+	import { getElement } from "~/helpers/dom";
+	getElement("[data-home-link]", HTMLAnchorElement).addEventListener(
+		"contextmenu",
+		(event) => {
+			event.preventDefault();
+			window.location.href = "/about/";
+		},
+	);
+</script>
+
+<style>
+	a[href="/"] {
+		font-size: var(--font-size-4);
+		font-weight: var(--font-weight-7);
+		line-height: var(--font-lineheight-3);
+		letter-spacing: var(--font-letterspacing-0);
+		color: var(--brand);
+		text-decoration: none;
+	}
+</style>

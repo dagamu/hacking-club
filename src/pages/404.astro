@@ -1,0 +1,78 @@
+---
+import MainLayout from "~/layouts/MainLayout.astro";
+import FourOFour from "./_assets/fail.webp";
+import siteInfo from "~/data/site-info";
+
+export const prerender = true;
+---
+
+<MainLayout title="Page not found" canonicalURL={null}>
+	<section id="four-o-four" data-goal={siteInfo.fathom404GoalId}>
+		<div>
+			<img
+				src={FourOFour.src}
+				width={FourOFour.width}
+				height={FourOFour.height}
+				alt=""
+			/>
+			<div>
+				<h1>404</h1>
+				<p>Looks like we have a problem...</p>
+				<p>
+					We couldn’t find that link.<br /> Check the address or <a
+						href="/"
+						rel="prefetch">head back home</a
+					>.
+				</p>
+			</div>
+		</div>
+	</section>
+</MainLayout>
+
+<style>
+	@import "open-props/src/props.media.css";
+	section {
+		display: grid;
+		place-items: center;
+		position: relative;
+		overflow: hidden;
+		padding-block: var(--size-fluid-5);
+		min-block-size: 100dvb;
+	}
+	img {
+		margin-inline: auto;
+		inline-size: auto;
+		block-size: var(--size-fluid-8);
+		@media (--motionOK) {
+			animation: var(--animation-fade-in-bloom) forwards, var(--animation-float);
+			animation-duration: 3s, 30s;
+		}
+	}
+	h1 {
+		font-family: var(--font-mono);
+		font-size: calc(2 * var(--font-size-fluid-3));
+		color: var(--accent);
+		text-align: center;
+	}
+	p {
+		text-align: center;
+		&:first-of-type {
+			font-size: var(--font-size-fluid-1);
+			margin-block: var(--size-fluid-2);
+		}
+	}
+	br {
+		display: none;
+		@media (--sm-n-above) {
+			display: initial;
+		}
+	}
+</style>
+
+<script>
+	if ("fathom" in window) {
+		const goal = document.getElementById("four-o-four")?.dataset.goal;
+		if (goal)
+			window.addEventListener("load", () => window.fathom.trackGoal(goal, 0));
+	}
+</script>

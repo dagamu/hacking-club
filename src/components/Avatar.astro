@@ -1,0 +1,48 @@
+---
+import { getEntryBySlug } from "astro:content";
+import { resolveImage } from "~/helpers/authors";
+
+type Props = {
+	name?: string;
+	image?: string;
+	lg?: boolean;
+};
+
+let { name, image, lg = false } = Astro.props;
+
+if (!image && name) {
+	const author = await getEntryBySlug("authors", name);
+	image = author && (await resolveImage(author))?.src;
+}
+---
+
+{
+	image && (
+		<img
+			src={image}
+			alt=""
+			aria-hidden="true"
+			width={48}
+			height={48}
+			loading="lazy"
+			decoding="async"
+		/>
+	)
+}
+
+<style>
+	@import "open-props/src/props.media.css";
+
+	img {
+		margin-block: 0;
+		display: inline-block;
+		border-radius: var(--radius-round);
+		border: var(--border-size-1) solid var(--brand);
+		inline-size: var(--size-6);
+		block-size: var(--size-6);
+		@media (--md-n-above) {
+			inline-size: var(--size-8);
+			block-size: var(--size-8);
+		}
+	}
+</style>

@@ -1,0 +1,91 @@
+@import "open-props/src/props.media.css";
+
+:root {
+	--brand: var(--orange-7);
+	--accent: var(--indigo-7);
+	--link: var(--orange-7);
+	--link-hsl: var(--orange-7-hsl);
+	--link-hover: var(--orange-9);
+	--link-visited: var(--pink-7);
+	--text-1: var(--gray-9);
+	--text-2: var(--gray-7);
+	--input-color: var(--gray-12);
+	--surface-1: var(--gray-2);
+	--surface-2: var(--gray-1);
+	--surface-3: var(--gray-3);
+	--surface-4: var(--gray-4);
+	--surface-1-hsl: var(--gray-3-hsl);
+	--surface-2-hsl: var(--gray-1-hsl);
+	--surface-3-hsl: var(--gray-4-hsl);
+	--surface-4-hsl: var(--gray-5-hsl);
+	--scrollthumb-color: var(--orange-7);
+	--shadow-strength: 1% !important;
+
+	@media (--OSdark) {
+		--brand: var(--orange-3);
+		--accent: var(--indigo-3);
+		--link: var(--orange-3);
+		--link-hsl: var(--orange-3-hsl);
+		--link-hover: var(--orange-1);
+		--link-visited: var(--pink-3);
+		--text-1: var(--gray-1);
+		--text-2: var(--gray-3);
+		--input-color: var(--gray-12);
+		--surface-1: var(--gray-9);
+		--surface-2: var(--gray-8);
+		--surface-3: var(--gray-7);
+		--surface-4: var(--gray-6);
+		--surface-1-hsl: var(--gray-9-hsl);
+		--surface-2-hsl: var(--gray-8-hsl);
+		--surface-3-hsl: var(--gray-7-hsl);
+		--surface-4-hsl: var(--gray-6-hsl);
+		--scrollthumb-color: var(--orange-6);
+		--shadow-strength: 10%;
+		--shadow-color: 220 40% 2%;
+		color-scheme: dark;
+	}
+}
+
+[data-theme="light"] {
+	--brand: var(--orange-7);
+	--accent: var(--indigo-7);
+	--link: var(--orange-7);
+	--link-hsl: var(--orange-7-hsl);
+	--link-hover: var(--orange-9);
+	--link-visited: var(--pink-7);
+	--text-1: var(--gray-9);
+	--text-2: var(--gray-7);
+	--input-color: var(--surface-2);
+	--surface-1: var(--gray-3);
+	--surface-2: var(--gray-1);
+	--surface-3: var(--gray-4);
+	--surface-4: var(--gray-5);
+	--surface-1-hsl: var(--gray-2-hsl);
+	--surface-2-hsl: var(--gray-1-hsl);
+	--surface-3-hsl: var(--gray-3-hsl);
+	--surface-4-hsl: var(--gray-4-hsl);
+	--scrollthumb-color: var(--orange-7);
+	--shadow-strength: 1% !important;
+}
+
+[data-theme="dark"] {
+	--brand: var(--orange-3);
+	--accent: var(--indigo-3);
+	--link: var(--orange-3);
+	--link-hsl: var(--orange-3-hsl);
+	--link-hover: var(--orange-1);
+	--link-visited: var(--pink-3);
+	--text-1: var(--gray-1);
+	--text-2: var(--gray-3);
+	--input-color: var(--gray-12);
+	--surface-1: var(--gray-9);
+	--surface-2: var(--gray-8);
+	--surface-3: var(--gray-7);
+	--surface-4: var(--gray-6);
+	--surface-1-hsl: var(--gray-9-hsl);
+	--surface-2-hsl: var(--gray-8-hsl);
+	--surface-3-hsl: var(--gray-7-hsl);
+	--surface-4-hsl: var(--gray-6-hsl);
+	--scrollthumb-color: var(--orange-6);
+	color-scheme: dark;
+}

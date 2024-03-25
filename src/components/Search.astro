@@ -1,0 +1,195 @@
+---
+import { Icon } from "astro-icon";
+export interface Props {
+	id: string;
+	placeholder: string;
+	selector: string;
+	groupSelector?: string;
+}
+const { id, placeholder, selector, groupSelector } = Astro.props as Props;
+---
+
+<form>
+	<label>
+		<input type="text" id={id} placeholder={placeholder} autofocus />
+		<div>
+			<Icon
+				pack="heroicons-outline"
+				name="search"
+				size={24}
+				aria-hidden="true"
+			/>
+		</div>
+		<span class="sr-only">Search</span>
+	</label>
+</form>
+
+<style>
+	@import "open-props/src/props.media.css";
+	form {
+		display: flex;
+		justify-content: flex-end;
+		width: calc(25ch + 2.5rem);
+		min-width: calc(25ch + 2.5rem);
+		margin-inline: auto;
+		margin-block: var(--size-9);
+	}
+	label {
+		display: flex;
+		align-items: center;
+		border-radius: var(--radius-round);
+		background-color: var(--input-color);
+		padding: var(--size-1) var(--size-2);
+		&:focus-within {
+			outline-color: var(--brand, var(--link));
+			outline-style: solid;
+			outline-width: initial;
+			outline-offset: 5px;
+			@media (--motionOK) {
+				transition-duration: 0.25s;
+				transition: outline-offset 145ms var(--ease-2);
+			}
+		}
+	}
+
+	input {
+		background-color: transparent;
+		line-height: 2.5rem;
+		width: 25ch;
+		padding-inline-start: 2ch;
+		outline: none;
+	}
+	div {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 2.5rem;
+		height: 2.5rem;
+		border-radius: var(--radius-round);
+		background-color: var(--brand);
+		color: var(--surface-1);
+	}
+</style>
+
+<script src="https://polyfill.io/v3/polyfill.min.js?features=URLSearchParams"
+></script>
+<script type="module" define:vars={{ selector, groupSelector, id }}>
+	/* https://gomakethings.com/how-to-create-a-search-page-for-a-static-website-with-vanilla-js/ */
+	const stopWords = [
+		"a",
+		"an",
+		"and",
+		"are",
+		"aren't",
+		"as",
+		"by",
+		"can",
+		"cannot",
+		"can't",
+		"could",
+		"couldn't",
+		"how",
+		"is",
+		"isn't",
+		"it",
+		"its",
+		"it's",
+		"that",
+		"the",
+		"their",
+		"there",
+		"they",
+		"they're",
+		"them",
+		"to",
+		"too",
+		"us",
+		"very",
+		"was",
+		"we",
+		"well",
+		"were",
+		"what",
+		"whatever",
+		"when",
+		"whenever",
+		"where",
+		"with",
+		"would",
+		"yet",
+		"you",
+		"your",
+		"yours",
+		"yourself",
+		"yourselves",
+		"the",
+		"vanilla",
+		"javascript",
+		"js",
+	];
+	const input = document.getElementById(id);
+	const items = document.querySelectorAll(selector);
+	const groups = groupSelector ? document.querySelectorAll(groupSelector) : [];
+	const FPS_30 = 1000 / 30;
+	function debounce(fn, timeout = 150) {
+		let timer;
+		return (...args) => {
+			clearTimeout(timer);
+			timer = setTimeout(() => fn.apply(this, args), timeout);
+		};
+	}
+
+	const init = () => {
+		for (const item of items) {
+			item.setAttribute("hidden", "");
+		}
+	};
+	const update = () => {
+		if (input.value.length === 0) {
+			init();
+			updateURL();
+			return;
+		}
+		const regexMap = input.value
+			.toLowerCase()
+			.split(" ")
+			.filter((word) => word.length && !stopWords.includes(word))
+			.map((word) => new RegExp(word, "i"));
+		for (const item of items) {
+			const isMatch =
+				!regexMap.length ||
+				regexMap.some((regex) => !!item.textContent.match(regex));
+			isMatch
+				? item.removeAttribute("hidden")
+				: item.setAttribute("hidden", "");
+		}
+		for (const group of groups) {
+			const matchedItems = group.querySelectorAll(`${selector}:not([hidden])`);
+			matchedItems.length > 0
+				? group.removeAttribute("hidden")
+				: group.setAttribute("hidden", "");
+		}
+		updateURL();
+	};
+	const updateURL = () => {
+		const q = input.value?.trim();
+		if (q) {
+			const params = new URLSearchParams();
+			params.set("q", q);
+			window.history.replaceState(null, null, `?${params.toString()}`);
+		} else {
+			const [href] = window.location.href.split("?");
+			window.history.replaceState(null, null, href);
+		}
+	};
+	const hydrateQuery = () => {
+		const params = new URLSearchParams(location.search);
+		input.value = params.get("q") || "";
+	};
+	input.addEventListener("input", debounce(update, FPS_30), true);
+	hydrateQuery();
+	update();
+	window.addEventListener("load", function (e) {
+		window.setTimeout(() => input.focus(), 0);
+	});
+</script>

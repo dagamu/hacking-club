@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://astroprops.netlify.app/sitemap-index.xml

@@ -1,0 +1,36 @@
+---
+export type Props = {
+	text: string;
+};
+
+const { text } = Astro.props;
+---
+
+<a href="#main">{text}</a>
+
+<style>
+	@import "open-props/src/props.media.css";
+	a {
+		padding-inline: var(--size-6);
+		padding-block: var(--size-2);
+		background-color: var(--link);
+		color: var(--surface-1);
+		font-size: var(--font-size-fluid-1);
+		font-weight: var(--font-weight-7);
+		left: calc(50% - 100px);
+		position: absolute;
+		transform: translateY(-200%);
+		transition: none;
+		z-index: var(--layer-important);
+		&:visited {
+			color: var(--surface-1);
+		}
+		@media (--motionOK) {
+			transition: all 0.3s ease-in-out;
+		}
+	}
+
+	a:focus-visible {
+		transform: translateY(15px);
+	}
+</style>

@@ -1,0 +1,18 @@
+# Astro
+.astro
+
+# Build files
+#dist
+
+# Dependencies
+node_modules
+
+# Environment variables
+.env
+.env.production
+
+# Log files
+npm-debug.log*
+
+# MacOS
+.DS_Store

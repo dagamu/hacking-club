@@ -1,0 +1,106 @@
+---
+import { CollectionEntry, getCollection } from "astro:content";
+import { format } from "date-fns";
+import HistoryBackButton from "~/components/HistoryBackButton.astro";
+import StyledHr from "~/components/StyledHr.astro";
+import MainLayout from "~/layouts/MainLayout.astro";
+
+export const prerender = true;
+
+export async function getStaticPaths() {
+	const pages = await getCollection("pages");
+
+	return pages.map((page) => {
+		return {
+			params: { slug: page.slug },
+			props: { page },
+		};
+	});
+}
+
+const { page } = Astro.props as { page: CollectionEntry<"pages"> };
+const { seo, updated_date } = page.data;
+const { Content } = await page.render();
+
+const placeholderGradient = `var(--gradient-${
+	Math.floor(Math.random() * 30) + 1
+})`;
+---
+
+<MainLayout {...seo}>
+	<div class="container">
+		<div class="placeholder-gradient"></div>
+		<header>
+			<HistoryBackButton text="Back" />
+			<p>
+				Last updated on<br /><time datetime={updated_date.toISOString()}>
+					{format(updated_date, "MMMM d, yyyy")}
+				</time>
+			</p>
+			<h1>{seo.title}</h1>
+		</header>
+		<StyledHr rand />
+		<article class="prose">
+			<Content />
+		</article>
+	</div>
+</MainLayout>
+
+<style define:vars={{ placeholderGradient }}>
+	@import "open-props/src/props.media.css";
+	@import "open-props/gradients";
+
+	header {
+		background-color: var(--surface-1);
+		padding: var(--size-6);
+		margin-inline: auto;
+		inline-size: 100%;
+		text-align: center;
+		max-inline-size: min(var(--size-content-3), 80vi);
+		border-radius: var(--radius-2);
+	}
+	div.placeholder-gradient {
+		position: relative;
+		aspect-ratio: var(--ratio-widescreen);
+		clip-path: circle(200% at center -200%);
+		object-fit: cover;
+		box-shadow: var(--shadow-2);
+		z-index: -1;
+		max-inline-size: 100vi;
+		inset-inline-start: 50%;
+		inset-inline-end: 50%;
+		margin-left: -50vi;
+		margin-right: -50vi;
+		margin-block-end: calc(-1 * var(--size-12));
+		@media (--sm-n-above) {
+			margin-block-end: calc(-1 * var(--size-11));
+			aspect-ratio: var(--ratio-ultrawide);
+			clip-path: circle(200% at center -430%);
+		}
+		@media (--lg-n-above) {
+			inline-size: 100%;
+			max-inline-size: initial;
+			inset-inline-start: initial;
+			inset-inline-end: initial;
+			margin-left: 0;
+			margin-right: 0;
+			margin-block-end: calc(-1 * var(--size-11));
+		}
+	}
+	br {
+		display: initial;
+		@media (--sm-n-above) {
+			display: none;
+		}
+	}
+	div.placeholder-gradient {
+		background-image: var(--placeholderGradient);
+		background-size: cover;
+	}
+	p,
+	time {
+		font-family: var(--font-mono);
+		color: var(--text-2);
+		opacity: 0.7;
+	}
+</style>

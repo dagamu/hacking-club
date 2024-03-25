@@ -1,0 +1,125 @@
+---
+import { CollectionEntry, getCollection } from "astro:content";
+import { sortPosts } from "../helpers/posts";
+import siteInfo from "~/data/site-info";
+import Layout from "~/layouts/MainLayout.astro";
+import ButtonLink from "~/components/ButtonLink.astro";
+import PostCard from "~/components/PostCard.astro";
+import StyledHr from "~/components/StyledHr.astro";
+
+const posts = await getCollection("blog");
+
+const sortedPosts = sortPosts(posts);
+const featuredPosts = sortedPosts.filter(({ data }) => data.featured);
+---
+
+<Layout
+	title={siteInfo.name}
+	description={siteInfo.description}
+	image={{ src: "/og/blog.jpg", alt: `The ${siteInfo.name} Blog` }}
+>
+	<main class="container">
+		<section id="hero">
+			<h1>Hacking Club</h1>
+			<p>
+				Welcome to AstroProps, where minimal design meets effortless
+				customization. This responsive, SEO-friendly Astro blog theme styled
+				with Open Props offers a sleek aesthetic and takes care of complex
+				configurations for you. With AstroProps, focus on creating exceptional
+				content without the hassle. Enjoy built-in light and dark mode support,
+				ensuring a delightful reading experience for your visitors. Unlock your
+				blog's full potential effortlessly with AstroProps.
+			</p>
+			<div>
+				<ButtonLink
+					ctaText="Create your own AstroProps blog"
+					ctaUrl="/repo/"
+					ctaIcon="github"
+					external={false}
+				/>
+				<ButtonLink
+					ctaText="Browse posts"
+					ctaUrl="/posts/"
+					ctaIcon="book"
+					external={false}
+					outline={true}
+				/>
+			</div>
+		</section>
+
+		<StyledHr rand />
+
+		{
+			featuredPosts.length > 0 && (
+				<>
+					<section id="featured">
+						<h2>Featured Posts</h2>
+						<ul>
+							{featuredPosts.map(
+								(post, index) =>
+									index < siteInfo.featuredPosts && (
+										<li>
+											<PostCard post={post} />
+										</li>
+									),
+							)}
+						</ul>
+					</section>
+					<StyledHr rand />
+				</>
+			)
+		}
+
+		<section id="recent-posts">
+			<h2>Latest Posts</h2>
+			<ul>
+				{
+					sortedPosts.map(
+						(post, index) =>
+							index < siteInfo.recentPosts && (
+								<li>
+									<PostCard post={post} />
+								</li>
+							),
+					)
+				}
+			</ul>
+		</section>
+	</main>
+</Layout>
+
+<style>
+	@import "open-props/src/props.media.css";
+
+	#hero {
+		display: flex;
+		flex-direction: column;
+		gap: var(--size-6);
+		padding-block: var(--size-8);
+	}
+	div {
+		display: flex;
+		flex-direction: column;
+		gap: var(--size-6);
+		@media (--md-n-above) {
+			flex-direction: row;
+			align-items: center;
+		}
+	}
+	ul {
+		margin-inline: auto;
+		list-style: none;
+		display: grid;
+		justify-items: stretch;
+		gap: var(--size-6);
+		padding-inline-start: 0;
+		margin-block: var(--size-6);
+		@media (--md-n-above) {
+			grid-template-columns: repeat(2, 1fr);
+		}
+	}
+	li {
+		padding: 0;
+		max-inline-size: initial;
+	}
+</style>
