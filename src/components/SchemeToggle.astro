@@ -37,7 +37,7 @@
 		fill: var(--nav-icon);
 		stroke: none;
 
-		@nest :hover > svg > & {
+		:hover > svg > & {
 			fill: var(--nav-icon-hover);
 		}
 	}
@@ -55,7 +55,7 @@
 		transition: transform 0.5s var(--ease-elastic-4),
 			opacity var(--_opacity-dur) var(--ease-3);
 
-		@nest :hover > svg > & {
+		:hover > svg > & {
 			stroke: var(--nav-icon-hover);
 		}
 	}
